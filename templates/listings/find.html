@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+<!-- 
+<input type="text"> radio checkbox file number email date password
+<select name="" id=""></select>
+<textarea name="" id="" cols="30" rows="10"></textarea>
+form-control
+
+<label for=""></label>
+control-label -->
+
+{% block style %}
+    <style>
+        #suggestion_div{
+            margin-top:6px;
+        }
+
+        #suggestion_div p{
+            border-bottom:solid 1px rgb(150,150,150);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <br><br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4 col-md-2 col-sm-12"></div>
+            <div class="col-lg-4 col-md-8 col-sm-12">
+                <input type="text" id="search_box" class="form-control" autocomplete="off"/>
+                <div id="suggestion_div"></div>
+            </div>
+        </div>
+    </div>
+    <br><br><br><br/>
+    <br><br><br><br/>
+    <br><br><br><br/>
+{% endblock content %}
+
+{% block script %}
+  <script>
+    
+    $(document).ready(function(){
+        
+        $("#search_box").keyup(function(){
+            var search_text =  $.trim($(this).val());
+            
+            $.ajax({
+               url:"{% url 'listings:find' %}",
+               method:"GET",
+               data:{
+                   search_text:search_text
+               },
+               success:function(data){
+                    if(data.listings.length==0){
+                        $("#suggestion_div").html("");
+                    }else{
+                        var suggestion_html = "";
+                        for(a_listing of data.listings){
+                            suggestion_html += "<p>"+a_listing+"</p>";
+                        }
+                        $("#suggestion_div").html(suggestion_html);
+                    }
+               },
+               error:function(err){
+                    $("#suggestion_div").html("");
+               }
+            });
+
+        });
+        
+    });
+    
+
+  </script>
+{% endblock script %}
+
+
