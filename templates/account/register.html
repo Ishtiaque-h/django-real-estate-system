@@ -28,6 +28,7 @@
                 <div class="form-group">
                   <label for="username">Username</label>
                   <input type="text" id="username" placeholder="Username cannot be empty" name="username" class="form-control">
+                  
                 </div>
                 <div class="form-group">
                   <label for="email">Email</label>
@@ -42,6 +43,7 @@
                 <div class="form-group">
                   <label for="password">Password</label>
                   <input type="password" id="password" placeholder="Choose a strong password" name="password" class="form-control">
+                  <input type="checkbox" onclick="myFunction()">Show Password
                 </div>
                 <div class="form-group">
                   <label for="password2">Confirm Password</label>
@@ -62,12 +64,66 @@
 {% endblock %}
 
 {% block script %}
+
 <script>
+
+function myFunction() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
 
 $(document).ready(function(){
 
-  $("#username, #email").keyup(function(){
-    $(this).val($.trim($(this).val()).toLowerCase());
+  $("#username").keyup(function(){
+
+    var username = $(this).val(this.value.toLowerCase().trim());
+
+    if(username != ''){
+
+      if (username.length < 6){
+        $('#username').removeClass('is-valid').addClass('is-invalid');
+        $('#usernameError').remove();
+        $('#username').after('<div class="invalid-feedback d-block" id="usernameError">Username must be at least 6 characters!</div>');
+        return;
+      }
+
+      if(/^[A-Za-z0-9_]+$/.test(username) == false){
+        $('#username').removeClass('is-valid').addClass('is-invalid');
+        $('#usernameError').remove();
+        $('#usernameValid').remove();
+        $('#username').after('<div class="invalid-feedback d-block" id="usernameError">Username only contains characters, numbers and underscores!</div>');
+          return;
+      }
+
+       $.ajax({
+          url: "{% url 'account:validate_username' %}",
+          type: 'POST',
+          data: {username: username, csrfmiddlewaretoken:"{{csrf_token}}"},
+          success: function(response){
+              if (response.is_taken == true){
+                $('#username').removeClass('is-valid').addClass('is-invalid');
+                $('#usernameError').remove();
+                $('#usernameValid').remove();
+                $('#username').after('<div class="invalid-feedback d-block" id="usernameError">This username is not available!</div>');
+              }else{
+                $('#username').removeClass('is-invalid').addClass('is-valid');
+                $('#usernameValid').remove();
+                $('#usernameError').remove();
+                $('#username').after('<div class="valid-feedback d-block" id="usernameValid">Available</div>');
+             }
+           }
+       });
+      }
+  });
+
+    
+
+  $("#email").keyup(function(){
+    $(this).val(this.value.toLowerCase().trim());
   });
 
   $("#save-button").click(function(){
@@ -86,7 +142,7 @@ $(document).ready(function(){
       });
       return;
     }
-
+    
     if(username.length < 6){
       $.alert({
         title: 'Alert!',

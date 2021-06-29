@@ -10,5 +10,6 @@ class Contact(models.Model):
     message = models.TextField( blank=True)
     contact_date = models.DateTimeField(default=datetime.now, blank=True)
     user_id = models.IntegerField(blank=True)  #to track if someone logged in, but any user can make an inquiry if logged in or not 
+    
     def __str__(self):
         return self.name

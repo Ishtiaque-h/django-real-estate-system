@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'btre.listings',
     'btre.realtors',
     'btre.account',
-    'btre.contact'
+    'btre.contact',
+    'btre.dashboard',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'btre.dashboard.context_processors.default_context',
             ],
         },
     },
@@ -124,17 +126,38 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'btre/static')
-    ]
+    os.path.join(BASE_DIR, "static")
+]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 #messages
-#from django.contrib.messages import constants as messages
-#MESSAGE_TAGS = {
-#    messages.ERROR: 'danger'
-#}
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
+
+#Email config
+EMAIL_HOST= 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ishti.jewel@gmail.com'
+EMAIL_HOST_PASSWORD = '01670399688'
+EMAIL_USE_TLS = 'TRUE'
+#EMAIL_USE_SSL = 'TRUE'
+#EMAIL_TIMEOUT = 'NONE'
+#EMAIL_SSL_KEYFILE = ''
+#EMAIL_SSL_CERTFILE =
+
+
+MEDIA_SERVER = "/media/"
+
+STATIC_SERVER = "/static"
+
+MAINTHEME_SERVER = "/static"
+
+STATIC_URL = '/static/'

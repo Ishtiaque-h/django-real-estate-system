@@ -1,0 +1,1 @@
+;$(document).ready(function(){$('.nav-item[data-menu="activity-log"]').addClass("active");$('.nav-item[data-slide="activity-log"]').show();$('.fa[data-icon="activity-log"]').removeClass("fa-plus-circle").addClass("fa-minus-circle");});
