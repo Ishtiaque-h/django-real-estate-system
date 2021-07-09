@@ -27,7 +27,7 @@ urlpatterns = [
     path('listings/', include(('btre.listings.urls','listings'), namespace ='listings')),
     path('account/', include(('btre.account.urls', 'account'), namespace ='account')),
     path('contact/', include(('btre.contact.urls','contact'), namespace ='contact')),
-    path('dashboard/', include(('btre.dashboard.urls','dashboard'), namespace ='dashboard')),
+    path('dashboard/', include(('btre.dashboard.urls','dashboard') , namespace ='dashboard')),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),	
 	url(r'^static/(?P<path>.*)$', serve,{'document_root': "static"}),

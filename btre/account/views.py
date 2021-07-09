@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from btre.listings.models import Listing
 import email
 from django.http import JsonResponse
+from ..dashboard.decorators import login_required
 
 
 def validate_username(request):
@@ -114,7 +115,10 @@ def logout(request):
         #messages.success(request, 'You are succsssfully logged out')
         return redirect('pages:index')
 
+@login_required
 def dashboard(request):
+    if request.user.is_superuser or request.user.is_staff:
+        return redirect('dashboard:dashboard')
     listings = Listing.objects.order_by('-list_date')
     context = {
         'listings' : listings
